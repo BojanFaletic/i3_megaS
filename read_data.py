@@ -7,7 +7,7 @@ FILE = "data.txt"
 VISUALIZE = True
 
 
-def read_file_coefficients():
+def read_file_coefficients() -> np.ndarray:
     """Read all lines in file and store I,J,Z into buffer"""
     buffer = []
     with open(FILE, "r") as f:
@@ -51,11 +51,10 @@ def print_table(np_coefficient: np.ndarray) -> None:
         print()
 
 
-def plot_data(np_data: np.ndarray) -> None:
+def plot_data(z_data: np.ndarray) -> None:
     """Plots coefficient data"""
-    # remove mean value
-    z_data = np_data - np_data.mean()
 
+    # plot mean
     plt.subplot(311)
     projection_x = np.mean(z_data, axis=0)
     projection_y = np.mean(z_data, axis=1)
@@ -64,21 +63,23 @@ def plot_data(np_data: np.ndarray) -> None:
     plt.plot(projection_y, label="mean vertical")
     plt.legend()
 
+    # plot variance
     plt.subplot(312)
-    projection_x = np.std(z_data, axis=0)
-    projection_y = np.std(z_data, axis=1)
+    projection_x = np.var(z_data, axis=0)
+    projection_y = np.var(z_data, axis=1)
 
-    plt.plot(projection_x, label="std horizontal")
-    plt.plot(projection_y, label="std vertical")
+    plt.plot(projection_x, label="var horizontal")
+    plt.plot(projection_y, label="var vertical")
     plt.legend()
 
+    # plot legend
     plt.subplot(313)
     plt.imshow(z_data)
 
     plt.show()
 
 
-def main():
+def main() -> None:
     """Main function, print coefficients"""
     coefficients = read_file_coefficients()
     print_table(coefficients)
