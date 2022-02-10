@@ -28,6 +28,29 @@ def read_file_coefficients():
     return np_buffer
 
 
+def print_table(np_coefficient: np.ndarray) -> None:
+    """Print table in terminal"""
+    x_max, y_max = np_coefficient.shape
+    print("------ Coefficient from file [um]: ------")
+
+    # print header
+    print(" " * 5, end="")
+    for y in range(y_max):
+        end = " | " if y != y_max - 1 else ""
+        print(f"   {y}     ", end=end)
+    print()
+
+    # print body
+    for x in range(x_max):
+        for y in range(y_max):
+            end = " | " if y != y_max - 1 else ""
+            number = np_coefficient[x, y] * 1000
+            header = f"{x}    " if y == 0 else ""
+            spacer = " " * (4 - int(np.log10(number)))
+            print(header + spacer + f"{ number: .2f}", end=end)
+        print()
+
+
 def plot_data(np_data: np.ndarray) -> None:
     """Plots coefficient data"""
     # remove mean value
@@ -58,9 +81,7 @@ def plot_data(np_data: np.ndarray) -> None:
 def main():
     """Main function, print coefficients"""
     coefficients = read_file_coefficients()
-
-    print("Coefficient from file")
-    print(coefficients)
+    print_table(coefficients)
 
     # Projection in x,y axis
     mean_x = np.mean(coefficients, axis=0)
